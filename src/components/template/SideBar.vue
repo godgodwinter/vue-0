@@ -106,7 +106,7 @@ const isSideBarActive = computed(() => store.state.isSideBarActive);
             </li>
             <li>
               <router-link
-                :to="{ name: 'Dashboard' }"
+                :to="{ name: 'Mapel' }"
                 class="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group"
               >
                 <svg
