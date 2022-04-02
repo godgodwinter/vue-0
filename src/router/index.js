@@ -7,6 +7,7 @@ import NotFound from '@/views/NotFound.vue';
 import LandingIndex from '@/views/landing/LandingIndex.vue';
 import Dashboard from '@/views/admin/Dashboard.vue';
 import Tapel from '@/views/admin/tapel/TapelIndex.vue';
+import Kelas from '@/views/admin/kelas/KelasIndex.vue';
 
 const routes = [
   {
@@ -42,6 +43,11 @@ const routes = [
         path: '/tapel', // halaman admin
         name: 'Tapel',
         component: Tapel,
+      },
+      {
+        path: '/kelas', // halaman admin
+        name: 'Kelas',
+        component: Kelas,
       },
     ],
   },

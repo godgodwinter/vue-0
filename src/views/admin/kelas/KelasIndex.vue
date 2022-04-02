@@ -10,13 +10,15 @@ const route = useRoute();
 // variable
 const data = ref("");
 const dataDetail = ref({
-  name: "",
+  tingkatan: "X",
+  jurusan: "IPA",
+  suffix: "1",
 });
 let dataId = null;
 // function Form and Validation
 const getData = async () => {
   try {
-    const response = await Api.get("tapels");
+    const response = await Api.get("kelas");
     data.value = response;
     return response;
   } catch (error) {
@@ -26,7 +28,7 @@ const getData = async () => {
 
 const getDataId = async () => {
   try {
-    const response = await Api.get(`tapels/${dataId}`);
+    const response = await Api.get(`kelas/${dataId}`);
     dataDetail.value = response;
     // console.log(response);
     return response;
@@ -38,7 +40,7 @@ const getDataId = async () => {
 const doDeleteData = async (id) => {
   if (confirm("Do you really want to delete?")) {
     try {
-      const response = await Api.delete(`tapels/${id}`);
+      const response = await Api.delete(`kelas/${id}`);
 
       Toast.success("Success", "Data Berhasil dihapus!");
       getData();
@@ -80,17 +82,9 @@ const columns = [
 ];
 
 // validasi
-function validateData(value) {
-  if (!value) {
-    return "This field is required";
-  }
-  if (value.length < 2) {
-    return "Username must be at least 2 characters";
-  }
-  return true;
-}
 
 function onSubmit() {
+  // console.log(dataDetail.value);
   data.value = null;
   const res = doStoreData(dataDetail.value);
   getData();
@@ -105,16 +99,20 @@ const doStoreData = async (d) => {
   // console.log(data);
   try {
     if (dataId) {
-      const response = await Api.put(`tapels/${dataId}`, {
-        name: d.name,
+      const response = await Api.put(`kelas/${dataId}`, {
+        tingkatan: d.tingkatan,
+        jurusan: d.jurusan,
+        suffix: d.suffix,
       });
 
       Toast.success("Success", "Data Berhasil diupdate!");
       getData();
       return response.data;
     }
-    const response = await Api.post("tapels", {
-      name: d.name,
+    const response = await Api.post("kelas", {
+      tingkatan: d.tingkatan,
+      jurusan: d.jurusan,
+      suffix: d.suffix,
     });
 
     getData();
@@ -129,7 +127,7 @@ const doStoreData = async (d) => {
 <template>
   <div class="pt-10 px-10">
     <span class="text-2xl sm:text-3xl leading-none font-bold text-gray-700 shadow-sm"
-      >Tapel</span
+      >Kelas</span
     >
   </div>
 
@@ -189,6 +187,10 @@ const doStoreData = async (d) => {
                 </div>
               </span>
 
+              <span v-if="props.column.field == 'name'">
+                {{ props.row.tingkatan }} {{ props.row.jurusan }} {{ props.row.suffix }}
+              </span>
+
               <span v-else-if="props.column.field == 'no'">
                 <div class="text-center">{{ props.index + 1 }}</div>
               </span>
@@ -208,20 +210,136 @@ const doStoreData = async (d) => {
           <div class="pt-6 px-4">
             <div class="w-full mx-4">
               <div class="bg-white rounded-lg p-4 sm:p-6 xl:p-8">
+                <div class="grid grid-cols-1 gap-6 mb-3">
+                  <div class="col-span-6 sm:col-span-3">
+                    <label for="name" class="text-sm font-medium text-gray-900 block mb-0"
+                      >Tingkatan</label
+                    >
+                    <div class="w-full flex gap-4">
+                      <label class="inline-flex items-center mt-3">
+                        <Field
+                          v-model="dataDetail.tingkatan"
+                          value="X"
+                          type="radio"
+                          name="tingkatan"
+                          ref="tingkatan"
+                          class="form-radio h-5 w-5 text-gray-600"
+                          checked
+                        /><span class="ml-2 text-gray-700">X</span>
+                      </label>
+
+                      <label class="inline-flex items-center mt-3">
+                        <Field
+                          v-model="dataDetail.tingkatan"
+                          value="XI"
+                          type="radio"
+                          name="tingkatan"
+                          ref="tingkatan"
+                          class="form-radio h-5 w-5 text-red-600"
+                        /><span class="ml-2 text-gray-700">XI</span>
+                      </label>
+
+                      <label class="inline-flex items-center mt-3">
+                        <Field
+                          v-model="dataDetail.tingkatan"
+                          value="XII"
+                          type="radio"
+                          name="tingkatan"
+                          ref="tingkatan"
+                          class="form-radio h-5 w-5 text-red-600"
+                        /><span class="ml-2 text-gray-700">XII</span>
+                      </label>
+                    </div>
+
+                    <div class="text-xs text-red-600 mt-1">{{ errors.name }}</div>
+                  </div>
+                </div>
+                <div class="grid grid-cols-1 gap-6 mb-4">
+                  <div class="col-span-6 sm:col-span-3">
+                    <label for="name" class="text-sm font-medium text-gray-900 block mb-0"
+                      >Jurusan</label
+                    >
+                    <div class="w-full flex gap-4">
+                      <label class="inline-flex items-center mt-3">
+                        <Field
+                          v-model="dataDetail.jurusan"
+                          value="IPA"
+                          type="radio"
+                          name="jurusan"
+                          ref="jurusan"
+                          class="form-radio h-5 w-5 text-gray-600"
+                          checked
+                        /><span class="ml-2 text-gray-700">IPA</span>
+                      </label>
+
+                      <label class="inline-flex items-center mt-3">
+                        <Field
+                          v-model="dataDetail.jurusan"
+                          value="IPS"
+                          type="radio"
+                          name="jurusan"
+                          ref="jurusan"
+                          class="form-radio h-5 w-5 text-red-600"
+                        /><span class="ml-2 text-gray-700">IPS</span>
+                      </label>
+
+                      <label class="inline-flex items-center mt-3">
+                        <Field
+                          v-model="dataDetail.jurusan"
+                          value="Bahasa"
+                          type="radio"
+                          name="jurusan"
+                          ref="jurusan"
+                          class="form-radio h-5 w-5 text-red-600"
+                        /><span class="ml-2 text-gray-700">Bahasa</span>
+                      </label>
+                    </div>
+
+                    <div class="text-xs text-red-600 mt-1">{{ errors.name }}</div>
+                  </div>
+                </div>
+
                 <div class="grid grid-cols-1 gap-6">
                   <div class="col-span-6 sm:col-span-3">
-                    <label for="name" class="text-sm font-medium text-gray-900 block mb-2"
-                      >Name</label
+                    <label for="name" class="text-sm font-medium text-gray-900 block mb-0"
+                      >Suffix</label
                     >
-                    <Field
-                      v-model="dataDetail.name"
-                      :rules="validateData"
-                      type="text"
-                      name="name"
-                      ref="name"
-                      class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                      required
-                    />
+                    <div class="w-full flex gap-4">
+                      <label class="inline-flex items-center mt-3">
+                        <Field
+                          v-model="dataDetail.suffix"
+                          value="1"
+                          type="radio"
+                          name="suffix"
+                          ref="suffix"
+                          class="form-radio h-5 w-5 text-gray-600"
+                          checked
+                        /><span class="ml-2 text-gray-700">1</span>
+                      </label>
+
+                      <label class="inline-flex items-center mt-3">
+                        <Field
+                          v-model="dataDetail.suffix"
+                          value="2"
+                          type="radio"
+                          name="suffix"
+                          ref="suffix"
+                          class="form-radio h-5 w-5 text-red-600"
+                        /><span class="ml-2 text-gray-700">2</span>
+                      </label>
+
+                      <label class="inline-flex items-center mt-3">
+                        <Field
+                          v-model="dataDetail.suffix"
+                          value="3"
+                          type="radio"
+                          name="suffix"
+                          ref="suffix"
+                          class="form-radio h-5 w-5 text-red-600"
+                        /><span class="ml-2 text-gray-700">3</span>
+                      </label>
+                    </div>
+
                     <div class="text-xs text-red-600 mt-1">{{ errors.name }}</div>
                   </div>
                 </div>
