@@ -1,11 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router';
 // layouts
-import LandingLayout from '/src/layouts/LandingLayout.vue';
-import AdminLayout from '/src/layouts/AdminLayout.vue';
+import LandingLayout from '@/layouts/LandingLayout.vue';
+import AdminLayout from '@/layouts/AdminLayout.vue';
 // pages
-import NotFound from '/src/views/NotFound.vue';
-import LandingIndex from '/src/views/landing/LandingIndex.vue';
-import Dashboard from '/src/views/admin/Dashboard.vue';
+import NotFound from '@/views/NotFound.vue';
+import LandingIndex from '@/views/landing/LandingIndex.vue';
+import Dashboard from '@/views/admin/Dashboard.vue';
+import Tapel from '@/views/admin/tapel/TapelIndex.vue';
 
 const routes = [
   {
@@ -27,17 +28,22 @@ const routes = [
     ],
   },
   {
-  path: '/AdminLayout',
-  name: 'Admin2',
-  component: AdminLayout,
-  redirect: '/',
-  children: [
-            {
-              path: '/dashboard',  //halaman admin
-              name: 'Dashboard',
-              component: Dashboard,
-            },
-  ]
+    path: '/AdminLayout',
+    name: 'Admin2',
+    component: AdminLayout,
+    redirect: '/',
+    children: [
+      {
+        path: '/dashboard', // halaman admin
+        name: 'Dashboard',
+        component: Dashboard,
+      },
+      {
+        path: '/tapel', // halaman admin
+        name: 'Tapel',
+        component: Tapel,
+      },
+    ],
   },
   {
     path: '/:catchAll(.*)', redirect: '/404',
