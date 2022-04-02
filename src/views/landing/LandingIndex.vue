@@ -1,10 +1,11 @@
 <script setup>
 // library
-import { Field, Form } from 'vee-validate';
-import { useStore } from 'vuex';
-import { useRouter } from 'vue-router';
-import Toast from '@/components/lib/Toast.js';
-import Api from '@/axios/axios';
+import { Field, Form } from "vee-validate";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
+import Toast from "@/components/lib/Toast.js";
+import Api from "@/axios/axios";
+import jwt_decode from "jwt-decode";
 // import Toast from '@/components/atoms/Toast.vue';
 
 // declar var library
@@ -13,62 +14,64 @@ const router = useRouter();
 
 const doLogin = async (username, password) => {
   try {
-    const response = await Api.post('login', {
+    const response = await Api.post("login", {
       email: username,
       password,
     });
-    console.log(response);
+    // console.log(response);
     if (response.code === 200) {
       const { token } = response;
-      localStorage.setItem('token', token);
-      localStorage.setItem('isLogin', true);
+      localStorage.setItem("token", token);
+      localStorage.setItem("isLogin", true);
       // console.log('Login berhasil');
-      store.commit('setToken', token);
-      store.commit('setIsLogin', true);
-      router.push({ name: 'Dashboard' });
-      Toast.success('Success', 'Login Berhasil!');
+      store.commit("setToken", token);
+      store.commit("setIsLogin", true);
+      router.push({ name: "Dashboard" });
+      Toast.success("Success", "Login Berhasil!");
+      let decoded = jwt_decode(token);
+      store.commit("setDataAuth", decoded);
+      // console.log(decoded);
     } else {
-      Toast.danger('Warning', 'Login gagal!');
+      Toast.danger("Warning", "Login gagal!");
     }
     return response.data;
   } catch (error) {
     // console.error(error);
-    Toast.danger('Warning', 'Login gagal!');
+    Toast.danger("Warning", "Login gagal!");
   }
 };
 // login
-function onSubmit(values) {
-  const res = doLogin(values.username, values.password);
-  console.log(res);
+async function onSubmit(values) {
+  const res = await doLogin(values.username, values.password);
+  // console.log(res.token);
 }
 // validasi
 function validateUsername(value) {
   if (!value) {
-    return 'This field is required';
+    return "This field is required";
   }
   if (value.length < 3) {
-    return 'Username must be at least 3 characters';
+    return "Username must be at least 3 characters";
   }
   return true;
 }
 function ValidatePassword(value) {
   if (!value) {
-    return 'This field is required';
+    return "This field is required";
   }
   if (value.length < 3) {
-    return 'Password must be at least 3 characters';
+    return "Password must be at least 3 characters";
   }
   return true;
 }
 </script>
 <template>
-<!-- <Toast ></Toast> -->
+  <!-- <Toast ></Toast> -->
 
   <div class="min-h-screen bg-white flex flex-col justify-center sm:py-12">
     <div class="relative py-0 sm:max-w-xl sm:mx-auto">
       <div
-        class="absolute inset-0 bg-gradient-to-r from-cyan-400 to-sky-500
-        shadow-lg transform -skew-y-2 sm:skew-y-0 sm:-rotate-2 sm:rounded-3xl"
+        class="absolute inset-0 bg-gradient-to-r from-cyan-400 to-sky-500 shadow-lg transform -skew-y-2 sm:skew-y-0 sm:-rotate-2 sm:rounded-3xl"
       ></div>
       <div class="relative px-4 py-10 bg-white shadow-2xl sm:rounded-3xl sm:p-10">
         <div class="max-w-md mx-auto">
@@ -95,8 +98,7 @@ function ValidatePassword(value) {
                     >
                     <div class="relative">
                       <div
-                        class="inline-flex items-center justify-center
-                        absolute left-0 top-0 h-full w-10 text-gray-400"
+                        class="inline-flex items-center justify-center absolute left-0 top-0 h-full w-10 text-gray-400"
                       >
                         <i class="fas fa-at text-blue-500"></i>
                       </div>
@@ -105,8 +107,7 @@ function ValidatePassword(value) {
                         name="username"
                         type="email"
                         :rules="validateUsername"
-                        class="w-full border-gray-300 border px-4 py-2 rounded
-                        focus:border focus:border-blue-500 focus:shadow-outline outline-none"
+                        class="w-full border-gray-300 border px-4 py-2 rounded focus:border focus:border-blue-500 focus:shadow-outline outline-none"
                       />
 
                       <div class="text-xs text-red-600 mt-1">{{ errors.username }}</div>
@@ -120,8 +121,7 @@ function ValidatePassword(value) {
                     >
                     <div class="relative">
                       <div
-                        class="inline-flex items-center justify-center
-                        absolute left-0 top-0 h-full w-10 text-gray-400"
+                        class="inline-flex items-center justify-center absolute left-0 top-0 h-full w-10 text-gray-400"
                       >
                         <span>
                           <i class="fas fa-lock text-blue-500"></i>
@@ -132,22 +132,18 @@ function ValidatePassword(value) {
                         name="password"
                         type="password"
                         :rules="ValidatePassword"
-                        class="w-full border-gray-300 border px-4 py-2
-                        rounded focus:border focus:border-blue-500
-                        focus:shadow-outline outline-none"
+                        class="w-full border-gray-300 border px-4 py-2 rounded focus:border focus:border-blue-500 focus:shadow-outline outline-none"
                       />
 
                       <div class="text-xs text-red-600 mt-1">{{ errors.password }}</div>
                     </div>
                   </div>
 
-                  <button class="flex w-full" type="submit">
-                    <a
+                  <button class="flex w-full">
+                    <span
                       href="#"
                       type="submit"
-                      class="flex mt-2 items-center justify-center
-                      focus:outline-none text-white text-sm sm:text-base bg-blue-500
-                      hover:bg-blue-600 rounded-2xl py-2 w-full transition duration-150 ease-in"
+                      class="flex mt-2 items-center justify-center focus:outline-none text-white text-sm sm:text-base bg-blue-500 hover:bg-blue-600 rounded-2xl py-2 w-full transition duration-150 ease-in"
                     >
                       <span class="mr-2 uppercase">Sign In</span>
                       <span>
@@ -165,7 +161,7 @@ function ValidatePassword(value) {
                           />
                         </svg>
                       </span>
-                    </a>
+                    </span>
                   </button>
                 </div>
               </Form>
