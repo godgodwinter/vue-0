@@ -9,6 +9,7 @@ import Dashboard from '@/views/admin/Dashboard.vue';
 import Tapel from '@/views/admin/tapel/TapelIndex.vue';
 import Kelas from '@/views/admin/kelas/KelasIndex.vue';
 import Mapel from '@/views/admin/mapel/Index.vue';
+import Siswa from '@/views/admin/siswa/Index.vue';
 
 const routes = [
   {
@@ -54,6 +55,11 @@ const routes = [
         path: '/mapel', // halaman admin
         name: 'Mapel',
         component: Mapel,
+      },
+      {
+        path: '/siswa', // halaman admin
+        name: 'Siswa',
+        component: Siswa,
       },
     ],
   },
