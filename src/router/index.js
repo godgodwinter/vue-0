@@ -10,6 +10,7 @@ import Tapel from '@/views/admin/tapel/TapelIndex.vue';
 import Kelas from '@/views/admin/kelas/KelasIndex.vue';
 import Mapel from '@/views/admin/mapel/Index.vue';
 import Siswa from '@/views/admin/siswa/Index.vue';
+import BankSoal from '@/views/admin/bank/Index.vue';
 
 const routes = [
   {
@@ -60,6 +61,11 @@ const routes = [
         path: '/siswa', // halaman admin
         name: 'Siswa',
         component: Siswa,
+      },
+      {
+        path: '/banksoal', // halaman admin
+        name: 'BankSoal',
+        component: BankSoal,
       },
     ],
   },
