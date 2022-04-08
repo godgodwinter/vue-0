@@ -1,14 +1,6 @@
-<script setup>
-const props = defineProps({
-  title: String,
-  default() {
-    return "Default function";
-  },
-});
-</script>
 <template>
-  <Popper arrow :content="props.title">
-    <slot name="content"> test </slot>
+  <Popper arrow content="This is the Popper content 🍿">
+    <Button>Demo</Button>
   </Popper>
 </template>
 
@@ -30,7 +22,7 @@ export default defineComponent({
   border-radius: 20px;
   color: #fff;
   font-weight: bold;
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
 }
 
 :deep(.popper #arrow::before) {

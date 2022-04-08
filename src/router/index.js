@@ -11,6 +11,8 @@ import Kelas from '@/views/admin/kelas/KelasIndex.vue';
 import Mapel from '@/views/admin/mapel/Index.vue';
 import Siswa from '@/views/admin/siswa/Index.vue';
 import BankSoal from '@/views/admin/bank/Index.vue';
+import BankSoalDetail from '@/views/admin/bank/Detail.vue';
+import BankSoalCreateSoal from '@/views/admin/bank/CreateSoal.vue';
 
 const routes = [
   {
@@ -63,9 +65,19 @@ const routes = [
         component: Siswa,
       },
       {
-        path: '/banksoal', // halaman admin
+        path: '/banksoal', // halaman banksoal
         name: 'BankSoal',
         component: BankSoal,
+      },
+      {
+        path: '/banksoal/:id', // halaman admin
+        name: 'BankSoalDetail',
+        component: BankSoalDetail,
+      },
+      {
+        path: '/banksoalcreate/:id', // halaman admin
+        name: 'BankSoalCreateSoal',
+        component: BankSoalCreateSoal,
       },
     ],
   },
