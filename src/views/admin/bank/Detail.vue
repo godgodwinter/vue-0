@@ -251,6 +251,10 @@ const columns = [
                 <div class="text-center">{{ props.index + 1 }}</div>
               </span>
 
+              <span v-if="props.column.field == 'countJawaban'">
+                <p class="text-center">{{ props.row.countJawaban }}</p>
+              </span>
+
               <span v-else>
                 {{ props.formattedRow[props.column.field] }}
               </span>
